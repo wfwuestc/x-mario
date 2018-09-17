@@ -35,6 +35,7 @@ let ajax = request => {
 
 const __main = () => {
     window.offset = 32768
+    let tileOffset = 32784
     bindEvent()
     let request = {
         url: 'mario.nes',
@@ -42,6 +43,7 @@ const __main = () => {
             window.bytes = new Uint8Array(r)
             log('bytes', bytes)
             drawNes(bytes)
+            drawSprite(bytes.slice(tileOffset))
         }
     }
     ajax(request)  
@@ -90,4 +92,20 @@ const drawBlock = (context, data, x, y, pixelWidth) => {
     }
 }
 
+const drawSprite = data => {
+    let context = e('#id-canvas-sprite').getContext('2d')
+    let pixelPerBlock = 8
+    let pixelWidth = 10
+    let blockSize = pixelWidth * pixelPerBlock
+    let offset = 0
+    for(let i = 0; i < 4; i++){
+        for(let j = 0; j < 2; j++){
+            let x = j * blockSize
+            let y = i * blockSize
+            let pixels = data.slice(offset)
+            drawBlock(context, pixels, x, y, pixelWidth)
+            offset += 16
+        }
+    }
+}
 __main()

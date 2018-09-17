@@ -20,6 +20,11 @@ const bindEvent = () => {
         let offset = Number(event.target.dataset.offset)
         actions[action] && actions[action](offset)
     })
+    window.addEventListener('keydown', event => {
+        if(event.key === 'p') {
+            window.paused = !window.paused
+        }
+    })
 }
 
 let ajax = request => {
@@ -36,6 +41,7 @@ let ajax = request => {
 
 const __main = () => {
     window.offset = 32784
+    window.paused = false
     let tileOffset = 32784
     bindEvent()
     let request = {
@@ -51,9 +57,14 @@ const __main = () => {
             setInterval(() => {
                 let offset = tileOffset + step * bytesPerSprite
                 drawSprite(bytes.slice(offset))
-                step++
-                step %= 3
-            },1000 / 8)
+
+                if(window.paused) {
+
+                } else {
+                    step++
+                    step %= 3
+                }
+            },500)
         }
     }
     ajax(request)  

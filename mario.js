@@ -44,13 +44,15 @@ const __main = () => {
             window.bytes = new Uint8Array(r)
             log('bytes', bytes)
             drawNes(bytes)
-
+            let bytesPerBlock = 16
+            let tilePerSprite = 8
+            let bytesPerSprite = bytesPerBlock * tilePerSprite
+            let step = 0
             setInterval(() => {
-                drawSprite(bytes.slice(tileOffset))
-                tileOffset += 128
-                if(tileOffset == 33168) {
-                    tileOffset = 32784
-                }
+                let offset = tileOffset + step * bytesPerSprite
+                drawSprite(bytes.slice(offset))
+                step++
+                step %= 3
             },1000 / 8)
         }
     }

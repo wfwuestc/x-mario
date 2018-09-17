@@ -1,6 +1,7 @@
 /*
-    8*8 像素每个方块
+    8*8 像素每个图块
     2 bits 每个像素
+    每个图块 16 bytes
 */
 const log = console.log.bind(console)
 let e = sel => document.querySelector(sel)
@@ -34,7 +35,7 @@ let ajax = request => {
 }
 
 const __main = () => {
-    window.offset = 32768
+    window.offset = 32784
     let tileOffset = 32784
     bindEvent()
     let request = {
@@ -43,7 +44,14 @@ const __main = () => {
             window.bytes = new Uint8Array(r)
             log('bytes', bytes)
             drawNes(bytes)
-            drawSprite(bytes.slice(tileOffset))
+
+            setInterval(() => {
+                drawSprite(bytes.slice(tileOffset))
+                tileOffset += 128
+                if(tileOffset == 33168) {
+                    tileOffset = 32784
+                }
+            },1000 / 8)
         }
     }
     ajax(request)  
